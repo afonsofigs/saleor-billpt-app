@@ -1,6 +1,3 @@
-/**
- * Add test setup logic here
- *
- * https://vitest.dev/config/#setupfiles
- */
-export {}
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env" });
