@@ -1,6 +1,7 @@
+import { OrderPayloadFragment } from "../../../../../generated/graphql";
 import { API_ITEMS, urlSafe } from "./utils";
 
-export async function getProductURLString(prod: any, idx: number = 0) {
+export async function getProductURLString(prod: OrderPayloadFragment["lines"][0], idx: number = 0) {
   const prodName = urlSafe(prod.productName + " - " + prod.variantName, 200);
 
   const iva = (() => {
@@ -30,7 +31,7 @@ export async function getProductURLString(prod: any, idx: number = 0) {
     });
 
   if (prodId === "") {
-    let createProdUrl = API_ITEMS;
+    let createProdUrl: string = API_ITEMS;
     createProdUrl += `&descricao=${prodName}`;
     createProdUrl += `&unidade_medida_id=16094`;
     createProdUrl += `&ProductCategory=M`;

@@ -1,9 +1,10 @@
-import { API_CONTATOS, BILL_API_TOKEN, urlSafe } from "./utils";
+import { OrderPayloadFragment } from "../../../../../generated/graphql";
+import { API_CONTATOS, API_UPDATE_CONTATO, urlSafe } from "./utils";
 
 export async function getClientId(
-  billingAddress: any,
-  userEmail: string | null | undefined,
-  user: { id: string; email: string } | null | undefined
+  billingAddress: OrderPayloadFragment["billingAddress"],
+  userEmail: OrderPayloadFragment["userEmail"],
+  user: OrderPayloadFragment["user"]
 ) {
   const clientEmail = userEmail ?? user?.email ?? "clientsememail@error.com";
   const findUserUrl = `${API_CONTATOS}&pesquisa[email]=${clientEmail}`;
@@ -52,18 +53,20 @@ export async function getClientId(
   const phone = urlSafe(billingAddress?.phone ?? "", 50);
   const lingua_documentos: "pt" | "en" | "fr" = "pt";
 
-  const createOrUpdateUserUrl = `https://app.bill.pt/api/1.0/contatos${
-    clientId === "" ? "" : "/" + clientId
-  }?api_token=${BILL_API_TOKEN}&nome=${clientName}&pais=${country}${
-    nif !== "" ? "&nif=" + nif : ""
-  }&email=${clientEmail}&morada=${address}${
-    postalCode !== "" ? "&codigo_postal=" + postalCode : ""
-  }&cidade=${city}${
-    phone !== "" ? "&telefone_contacto=" + phone : ""
-  }&lingua_padrao_documentos=${lingua_documentos}`;
+  const newClient: boolean = clientId === "";
+  let createOrUpdateUserUrl: string = newClient ? API_CONTATOS : API_UPDATE_CONTATO(clientId);
+  createOrUpdateUserUrl += `&nome=${clientName}`;
+  createOrUpdateUserUrl += `&pais=${country}$`;
+  createOrUpdateUserUrl += `"&nif=${nif}`;
+  createOrUpdateUserUrl += `&email=${clientEmail}`;
+  createOrUpdateUserUrl += `&morada=${address}`;
+  createOrUpdateUserUrl += `&codigo_postal=${postalCode}`;
+  createOrUpdateUserUrl += `&cidade=${city}`;
+  createOrUpdateUserUrl += `&telefone_contacto=${phone}`;
+  createOrUpdateUserUrl += `&lingua_padrao_documentos=${lingua_documentos}`;
 
   await fetch(createOrUpdateUserUrl, {
-    method: clientId === "" ? "POST" : "PATCH",
+    method: newClient ? "POST" : "PATCH",
   })
     .then((response) => response.json())
     .then((body) => {

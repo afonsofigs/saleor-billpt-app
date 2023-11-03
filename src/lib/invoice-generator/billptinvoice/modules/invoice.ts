@@ -2,8 +2,11 @@ import fs from "fs";
 import { API_DOCS, APP_DOCS_DOWNLOAD, TERMINADO } from "./utils";
 
 export async function createInvoice(clientId: string, allProdsString: string) {
-  // Create Invoice
-  const createInvoiceUrl = `${API_DOCS}&tipificacao=FR&contato_id=${clientId}${allProdsString}&terminado=${TERMINADO}`;
+  let createInvoiceUrl = API_DOCS;
+  createInvoiceUrl += `&tipificacao=FR`;
+  createInvoiceUrl += `&contato_id=${clientId}${allProdsString}`;
+  createInvoiceUrl += `&terminado=${TERMINADO}`;
+
   let invoiceId = "";
   let token_download = "";
 
