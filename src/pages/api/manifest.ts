@@ -2,6 +2,7 @@ import { createManifestHandler } from "@saleor/app-sdk/handlers/next";
 import { AppManifest } from "@saleor/app-sdk/types";
 
 import packageJson from "../../../package.json";
+import { invoiceRequestedWebhook } from "./webhooks/invoice-requested";
 import { orderConfirmedWebhook } from "./webhooks/order-confirmed";
 
 /**
@@ -34,7 +35,7 @@ export default createManifestHandler({
        * Requires 3.10 due to invoices event payload - in previous versions, order reference was missing
        * Also only in 3.10 was the metafields included
        */
-      requiredSaleorVersion: "3.10",
+      requiredSaleorVersion: ">=3.10",
       version: packageJson.version,
       /**
        * Configure webhooks here. They will be created in Saleor during installation
@@ -44,7 +45,10 @@ export default createManifestHandler({
        * Easiest way to create webhook is to use app-sdk
        * https://github.com/saleor/saleor-app-sdk/blob/main/docs/saleor-webhook.md
        */
-      webhooks: [orderConfirmedWebhook.getWebhookManifest(apiBaseURL)],
+      webhooks: [
+        orderConfirmedWebhook.getWebhookManifest(apiBaseURL),
+        invoiceRequestedWebhook.getWebhookManifest(apiBaseURL),
+      ],
       /**
        * Optionally, extend Dashboard with custom UIs
        * https://docs.saleor.io/docs/3.x/developer/extending/apps/extending-dashboard-with-apps

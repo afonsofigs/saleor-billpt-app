@@ -110,6 +110,21 @@ export const mockOrder: OrderPayloadFragment = {
           currency: "EUR",
         },
       },
+      undiscountedUnitPrice: {
+        currency: "EUR",
+        gross: {
+          amount: 12.79,
+          currency: "EUR",
+        },
+        net: {
+          amount: 10.4,
+          currency: "EUR",
+        },
+        tax: {
+          amount: 2.39,
+          currency: "EUR",
+        },
+      },
     },
     {
       productVariantId: "UHJvZHVjdFZhcmlhbnQ6MjM=",
@@ -133,6 +148,21 @@ export const mockOrder: OrderPayloadFragment = {
         },
       },
       totalPrice: {
+        currency: "EUR",
+        gross: {
+          amount: 5.54,
+          currency: "EUR",
+        },
+        net: {
+          amount: 4.5,
+          currency: "EUR",
+        },
+        tax: {
+          amount: 1.04,
+          currency: "EUR",
+        },
+      },
+      undiscountedUnitPrice: {
         currency: "EUR",
         gross: {
           amount: 5.54,

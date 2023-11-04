@@ -99,3 +99,14 @@ subscription OrderConfirmedSubscribed {
     }
   }
 }
+
+subscription InvoiceRequestedSubscribed {
+  event {
+    ... on InvoiceRequested {
+      issuedAt
+      order {
+        ...OrderPayload
+      }
+    }
+  }
+}
