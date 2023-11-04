@@ -12,19 +12,23 @@ export class BillptInvoiceGenerator implements InvoiceGenerator {
 
     //Create products full string
 
-    // Add shipping to products lines
-    const shippingName = order.shippingMethodName ?? "Shipping";
-    const shippingId =
-      order.shippingMethods.find((sm) => sm.name === order.shippingMethodName)?.id ?? shippingName;
-    order.lines.push({
-      productName: shippingName,
-      productVariantId: shippingId,
-      variantName: shippingId,
-      taxRate: 23,
-      quantity: 1,
-      unitPrice: order.shippingPrice,
-      totalPrice: order.shippingPrice,
-    });
+    // Add shipping to products lines if exists
+    if (order.shippingMethodName) {
+      const shippingName = order.shippingMethodName;
+      const shippingId =
+        order.shippingMethods.find((sm) => sm.name === order.shippingMethodName)?.id ??
+        shippingName;
+      order.lines.push({
+        productName: shippingName,
+        productVariantId: shippingId,
+        variantName: shippingId,
+        taxRate: 23,
+        quantity: 1,
+        unitPrice: order.shippingPrice,
+        totalPrice: order.shippingPrice,
+        undiscountedUnitPrice: order.shippingPrice,
+      });
+    }
 
     let allProdsString: string = "";
     for (let i = 0; i < order.lines.length; i++) {

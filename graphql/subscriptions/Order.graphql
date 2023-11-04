@@ -74,6 +74,9 @@ fragment OrderPayload on Order {
     variantName
     taxRate
     quantity
+    undiscountedUnitPrice {
+      ...TaxedMoney
+    }
     unitPrice {
       ...TaxedMoney
     }

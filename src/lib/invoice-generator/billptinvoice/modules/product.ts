@@ -16,7 +16,14 @@ export async function getProductURLString(prod: OrderPayloadFragment["lines"][0]
     }
   })();
 
-  const price = prod.unitPrice.net.amount; //unit price without vat with discounts
+  let price: number = prod.unitPrice.net.amount; //unit price without vat with discounts
+  let discount: "100" | "0" = "0";
+  if (price === 0) {
+    // Prevent error 271
+    price = prod.undiscountedUnitPrice.net.amount;
+    discount = "100";
+  }
+
   const prodSaleorId: string = urlSafe(prod.productVariantId ?? prodName, 100);
   const findProdUrl = `${API_ITEMS}&pesquisa[texto][codigo_barras]=${prodSaleorId}`;
 
@@ -43,6 +50,7 @@ export async function getProductURLString(prod: OrderPayloadFragment["lines"][0]
     createProdUrl += `&codigo_barras=${prodSaleorId}`;
     createProdUrl += `&precos[0][preco_nome]=Price1`;
     createProdUrl += `&precos[0][preco_sem_iva]=${price}`;
+    createProdUrl += `&precos[0][desconto_1]=${discount}`;
 
     await fetch(createProdUrl, { method: "POST" })
       .then((response) => response.json())
