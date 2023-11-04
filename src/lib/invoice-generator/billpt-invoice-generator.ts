@@ -85,7 +85,7 @@ export const invoiceHandler: NextWebhookApiHandler<InvoiceRequested | OrderConfi
     }
   } catch (e) {
     console.error(e);
-    return res.status(500).json({
+    return res.status(200).json({
       error: (e as any)?.message ?? "Error",
     });
   }
