@@ -8,6 +8,7 @@ import { InvoiceCreateNotifier } from "../../../lib/invoice-create-notifier/invo
 import { hashInvoiceFilename } from "../../../lib/invoice-file-name/hash-invoice-filename";
 import { resolveTempPdfFileLocation } from "../../../lib/invoice-file-name/resolve-temp-pdf-file-location";
 import { BillptInvoiceGenerator } from "../../../lib/invoice-generator/billptinvoice/billpt-invoice-generator";
+import { TERMINADO } from "../../../lib/invoice-generator/billptinvoice/modules/utils";
 import { SaleorInvoiceUploader } from "../../../lib/invoice-uploader/saleor-invoice-uploader";
 import { saleorApp } from "../../../saleor-app";
 
@@ -78,15 +79,22 @@ export default orderConfirmedWebhook.createHandler(async (req, res, ctx) => {
       filename: tempPdfLocation,
     });
 
-    const uploader = new SaleorInvoiceUploader(client);
+    if (TERMINADO) {
+      // Upload invoice to saleor
 
-    const uploadedFileUrl = await uploader.upload(tempPdfLocation, `${hashedInvoiceFileName}.pdf`);
+      const uploader = new SaleorInvoiceUploader(client);
 
-    await new InvoiceCreateNotifier(client).notifyInvoiceCreated(
-      order.id,
-      hashedInvoiceFileName,
-      uploadedFileUrl
-    );
+      const uploadedFileUrl = await uploader.upload(
+        tempPdfLocation,
+        `${hashedInvoiceFileName}.pdf`
+      );
+
+      await new InvoiceCreateNotifier(client).notifyInvoiceCreated(
+        order.id,
+        hashedInvoiceFileName,
+        uploadedFileUrl
+      );
+    }
   } catch (e) {
     console.error(e);
     return res.status(500).json({
