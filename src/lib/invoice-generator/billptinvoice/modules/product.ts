@@ -27,6 +27,7 @@ export async function getProductURLString(prod: OrderPayloadFragment["lines"][0]
     .then((body) => {
       console.log("Fetch find product");
       console.log(body);
+      if (body.error) throw Error("Error while fetching product: " + JSON.stringify(body.error));
       if (body.total > 0) prodId = body.data[0].id;
     });
 
@@ -46,6 +47,7 @@ export async function getProductURLString(prod: OrderPayloadFragment["lines"][0]
     await fetch(createProdUrl, { method: "POST" })
       .then((response) => response.json())
       .then((body) => {
+        if (body.error) throw Error("Error while creating produto: " + JSON.stringify(body.error));
         prodId = body.id;
       });
   }

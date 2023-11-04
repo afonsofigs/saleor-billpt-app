@@ -15,6 +15,7 @@ export async function createInvoice(clientId: string, allProdsString: string) {
     .then((body) => {
       console.log("Fetch create invoice");
       console.log(body);
+      if (body.error) throw Error("Error while creating invoice: " + JSON.stringify(body.error));
       invoiceId = body.id;
       token_download = body.token_download;
     });
