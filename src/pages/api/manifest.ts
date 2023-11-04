@@ -21,8 +21,7 @@ export default createManifestHandler({
 
     const manifest: AppManifest = {
       name: "Bill.pt Invoices App",
-      about:
-        "An app that user Bill.pt service to generate PDF invoices for Orders and stores them in Saleor file storage.",
+      about: "Use Bill.pt to generate invoices and store them in Saleor file storage.",
       tokenTargetUrl: `${apiBaseURL}/api/register`,
       appUrl: iframeBaseUrl,
       /**
@@ -32,7 +31,7 @@ export default createManifestHandler({
       permissions: ["MANAGE_ORDERS"],
       id: "saleor.app.billpt",
       /**
-       * Requires 3.10 due to invoices event payload - in previous versions, order reference was missing
+       * Requires at least 3.10 due to invoices event payload - in previous versions, order reference was missing
        * Also only in 3.10 was the metafields included
        */
       requiredSaleorVersion: ">=3.10",

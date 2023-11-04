@@ -64,6 +64,10 @@ const IndexPage: NextPage = () => {
         Trigger notification 📤
       </Button>
 
+      {/* TODO: Show latest invoices */}
+      {/* TODO: Set/unset terminado flag */}
+      {/* TODO: Set BILL_API_TOKEN */}
+
       {mounted && !isLocalHost && !appBridgeState?.ready && (
         <>
           <Text marginBottom={4} as={"p"}>
