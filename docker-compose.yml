@@ -1,0 +1,14 @@
+version: '3'
+services:
+  emails:
+    container_name: saleor-billpt-invoices-1
+    build:
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 3003:3003
+
+networks:
+  default:
+    name: saleor-platform_saleor-backend-tier
+    external: true
