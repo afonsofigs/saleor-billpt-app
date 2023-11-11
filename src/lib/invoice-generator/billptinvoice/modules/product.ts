@@ -8,6 +8,7 @@ export async function getProductURLString(prod: OrderPayloadFragment["lines"][0]
     //13% -> 13577; 23% -> 13576; 0->0
     switch (prod.taxRate) {
       case 13:
+      case 0.13:
         return "13577";
       case 0:
         return "0";
